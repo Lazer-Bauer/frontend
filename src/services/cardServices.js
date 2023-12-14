@@ -20,11 +20,21 @@ export async function getAllMyCards() {
   );
   return response;
 }
-
-const cardsService = {
-  getAll,
-  createCard,
-  getAllMyCards,
-};
-
-export default cardsService;
+export async function deleteCard(id) {
+  const response = await axios.delete(
+    `https://monkfish-app-z9uza.ondigitalocean.app/bcard2/cards/${id}`
+  );
+  return response;
+}
+export async function editCard(id) {
+  const response = await axios.put(
+    `https://monkfish-app-z9uza.ondigitalocean.app/bcard2/cards/${id}`
+  );
+  return response;
+}
+export async function getCard(id) {
+  const response = await axios.get(
+    `https://monkfish-app-z9uza.ondigitalocean.app/bcard2/cards/${id}`
+  );
+  return response;
+}

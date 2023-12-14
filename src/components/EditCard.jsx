@@ -1,23 +1,38 @@
 import { useFormik } from "formik";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Joi from "joi";
-import { createCard } from "../services/cardServices";
+import { createCard, editCard, getCard } from "../services/cardServices";
+import { useCard } from "../Hooks/useCard";
+import { useParams } from "react-router-dom";
 import { useAuth } from "../context/auth.context";
-const CreateCard = () => {
+const EditCard = () => {
   const navigate = useNavigate();
-  const [serverError, setServerError] = useState("");
+  const { id } = useParams();
+  const [card, setCard] = useState();
   const { checked } = useAuth();
+  const [serverError, setServerError] = useState("");
+  useEffect(() => {
+    getCard(id).then((response) => setCard(response.data));
+  }, [id]);
   const form = useFormik({
+    validateOnMount: true,
+    enableReinitialize: true, // Add this line
     initialValues: {
-      title: "",
-      subtitle: "",
-      description: "",
-      phone: "",
-      email: "",
-      web: "",
-      image: { url: "", alt: "picture" },
-      address: { country: "", city: "", street: "", houseNumber: "" },
+      title: card?.title,
+      subtitle: card?.subtitle,
+      description: card?.description,
+      phone: card?.phone,
+      email: card?.email,
+      web: card?.web,
+      image: { url: card?.image.url, alt: "picture" },
+      address: {
+        country: card?.address.country,
+        city: card?.address.city,
+        street: card?.address.street,
+        houseNumber: card?.address.houseNumber,
+        zip: card?.address.zip,
+      },
     },
 
     validate(values) {
@@ -34,7 +49,7 @@ const CreateCard = () => {
           city: Joi.string().required(),
           street: Joi.string().required(),
           houseNumber: Joi.number().min(1).required(),
-          zip: Joi.number(),
+          zip: Joi.number().required(),
         },
       });
 
@@ -56,7 +71,7 @@ const CreateCard = () => {
       console.log(values);
 
       try {
-        const response = await createCard(values);
+        const response = await editCard(values);
         console.log(response);
         navigate("/my-cards");
       } catch (err) {
@@ -75,10 +90,10 @@ const CreateCard = () => {
       <form onSubmit={form.handleSubmit} className="pt-5">
         <h1
           className={`h3 mb-3 fw-normal text-center ${
-            checked ? "" : `text-white`
+            checked ? "" : `text-light`
           } `}
         >
-          Create Card
+          Edit Card
         </h1>
         <div className="firstRow d-flex justify-content-center pt-3">
           <div className="form-floating pt-3 ">
@@ -252,11 +267,11 @@ const CreateCard = () => {
             className="btn btn-primary w-25 py-3 "
             type="submit"
           >
-            Create Card
+            Edit Card
           </button>
         </div>
       </form>
     </main>
   );
 };
-export default CreateCard;
+export default EditCard;

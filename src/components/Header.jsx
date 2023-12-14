@@ -1,168 +1,171 @@
 import { Link, NavLink } from "react-router-dom";
 import { useAuth } from "../context/auth.context";
+import { useState } from "react";
 
 const Header = () => {
   const { user } = useAuth();
+  const { checked, setChecked } = useAuth();
+  const { search, setSearch } = useAuth();
+  const toggle = () => {
+    setChecked(!checked);
+    console.log(checked);
+  };
+  const handleInputChange = (event) => {
+    setSearch(event.target?.value);
+    console.log(search);
+  };
   return (
-    <header className="p-3 mb-3 border-bottom bg-primary">
-      <div className="container">
-        <div className="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
-          <a
-            href="/"
-            className="d-flex align-items-center mb-2 mb-lg-0 link-body-emphasis text-decoration-none"
-          >
-            <svg
-              className="bi me-2"
-              width="40"
-              height="32"
-              role="img"
-              aria-label="Bootstrap"
-            ></svg>
-          </a>
+    <header
+      className={`p-3 mb-3 border-bottom ${
+        checked ? "bg-primary" : `bg-dark text-light`
+      } navbar navbar-expand-sm fixed-top z-3`}
+    >
+      <button
+        className="navbar-toggler "
+        type="button"
+        data-bs-toggle="collapse"
+        data-bs-target="#navbarsExample03"
+        aria-controls="navbarsExample03"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+        <span className="navbar-toggler-icon"></span>
+      </button>
 
-          <ul className="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
-            <li>
-              <NavLink
-                to="/"
-                href="#"
-                className="nav-link px-2 link-body-emphasis"
-              >
-                Home
-              </NavLink>
-            </li>
-            {user?.isBusiness && (
-              <>
-                <li>
-                  <NavLink
-                    to="create-card"
-                    className="nav-link px-2 link-body-emphasis"
-                  >
-                    Create card
-                  </NavLink>
-                </li>
-                <li>
-                  <NavLink
-                    to="my-cards"
-                    className="nav-link px-2 link-body-emphasis"
-                  >
-                    My Cards
-                  </NavLink>
-                </li>
-              </>
-            )}
-            {user && (
-              <>
-                <li>
-                  <NavLink
-                    to={"/favorites"}
-                    className="nav-link px-2 link-body-emphasis"
-                  >
-                    Favorites
-                  </NavLink>
-                </li>
-
-                <li>
-                  <NavLink
-                    to={"/sign-out"}
-                    className="nav-link px-2 link-body-emphasis"
-                  >
-                    Sign Out
-                  </NavLink>
-                </li>
-              </>
-            )}
-
-            {!user && (
-              <>
-                <li>
-                  <NavLink
-                    to={"/sign-up"}
-                    className="nav-link px-2 link-body-emphasis"
-                  >
-                    Sign up
-                  </NavLink>
-                </li>
-                <li>
-                  <NavLink
-                    to={"/sign-in"}
-                    className="nav-link px-2 link-body-emphasis"
-                  >
-                    Sign In
-                  </NavLink>
-                </li>
-                <li>
-                  <NavLink
-                    to="/sign-up-biz"
-                    className="nav-link px-2 link-body-emphasis"
-                  >
-                    Sign Up Business
-                  </NavLink>
-                </li>
-
-                <li>
-                  <a href="#" className="nav-link px-2 link-body-emphasis">
-                    Admin Login
-                  </a>
-                </li>
-              </>
-            )}
-          </ul>
-
-          <form
-            className="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3"
-            role="search"
-          >
-            <input
-              type="search"
-              className="form-control"
-              placeholder="Search..."
-              aria-label="Search"
-            />
-          </form>
-
-          <div className="dropdown text-end">
+      <div className="collapse navbar-collapse" id="navbarsExample03">
+        <div className="container">
+          <div className="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
             <a
-              href="#"
-              className="d-block link-body-emphasis text-decoration-none dropdown-toggle"
-              data-bs-toggle="dropdown"
-              aria-expanded="false"
+              href="/"
+              className="d-flex align-items-center mb-2 mb-lg-0 link-body-emphasis text-decoration-none"
             >
-              <img
-                src="https://github.com/mdo.png"
-                alt="mdo"
-                width="32"
+              <svg
+                className="bi me-2"
+                width="40"
                 height="32"
-                className="rounded-circle"
-              />
+                role="img"
+                aria-label="Bootstrap"
+              ></svg>
             </a>
-            <ul className="dropdown-menu text-small">
+
+            <ul
+              className={`navbar-nav me-auto mb-2 mb-sm-0  icon-link-hover ${
+                checked ? "" : "text-light"
+              }`}
+            >
               <li>
-                <a className="dropdown-item" href="#">
-                  New project...
-                </a>
+                <NavLink
+                  to="/"
+                  href="#"
+                  className="nav-link px-2 link-body-emphasis text-light"
+                >
+                  Home
+                </NavLink>
               </li>
-              <li>
-                <a className="dropdown-item" href="#">
-                  Settings
-                </a>
-              </li>
-              <li>
-                <a className="dropdown-item" href="#">
-                  Profile
-                </a>
-              </li>
-              <li>
-                <hr className="dropdown-divider" />
-              </li>
-              <li>
-                <a className="dropdown-item" href="#">
-                  Sign out
-                </a>
-              </li>
+              {user?.isBusiness && (
+                <>
+                  <li>
+                    <NavLink
+                      to="create-card"
+                      className="nav-link px-2 link-body-emphasis text-light"
+                    >
+                      Create card
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink
+                      to="my-cards"
+                      className="nav-link px-2 link-body-emphasis text-light"
+                    >
+                      My Cards
+                    </NavLink>
+                  </li>
+                </>
+              )}
+              {user && (
+                <>
+                  <li>
+                    <NavLink
+                      to={"/favorites"}
+                      className="nav-link px-2 link-body-emphasis text-light"
+                    >
+                      Favorites
+                    </NavLink>
+                  </li>
+
+                  <li>
+                    <NavLink
+                      to={"/sign-out"}
+                      className="nav-link px-2 link-body-emphasis text-light"
+                    >
+                      Sign Out
+                    </NavLink>
+                  </li>
+                </>
+              )}
+
+              {!user && (
+                <>
+                  <li>
+                    <NavLink
+                      to={"/sign-up"}
+                      className="nav-link px-2 link-body-emphasis text-light"
+                    >
+                      Sign up
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink
+                      to={"/sign-in"}
+                      className="nav-link px-2 link-body-emphasis text-light"
+                    >
+                      Sign In
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink
+                      to="/sign-up-biz"
+                      className="nav-link px-2 link-body-emphasis text-light"
+                    >
+                      Sign Up Business
+                    </NavLink>
+                  </li>
+                </>
+              )}
             </ul>
           </div>
         </div>
       </div>
+      <div className="form-check form-switch mx-5 ">
+        <label
+          className="form-check-label "
+          htmlFor="flexSwitchCheckDefault"
+        ></label>
+        {checked ? (
+          <i className="bi bi-moon-stars"></i>
+        ) : (
+          <i className="bi bi-brightness-high-fill"></i>
+        )}
+        <input
+          className="form-check-input "
+          type="checkbox"
+          role="switch"
+          id="flexSwitchCheckDefault"
+          onChange={toggle}
+        />
+      </div>
+
+      <form className="col-2 col-lg-auto mb-3 mb-lg-6 me-lg-6" role="search">
+        <input
+          type="search"
+          className="form-control"
+          placeholder="Search..."
+          aria-label="Search"
+          value={search}
+          onChange={handleInputChange}
+          id="myInput"
+        />
+      </form>
     </header>
   );
 };

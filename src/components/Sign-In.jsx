@@ -2,11 +2,12 @@ import { useFormik } from "formik";
 import { useState } from "react";
 import Joi from "joi";
 
-import {useNavigate} from "react-router-dom"
+import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/auth.context";
 const SignIn = () => {
-  const {user,login}=useAuth();
-  const navigate = useNavigate()
+  const { user, login } = useAuth();
+  const { checked } = useAuth();
+  const navigate = useNavigate();
   const [serverError, setServerError] = useState("");
   const form = useFormik({
     validateOnMount: true,
@@ -30,19 +31,17 @@ const SignIn = () => {
           .pattern(new RegExp("(?=.*[!@#$%^&])")),
       });
       const { error } = schema.validate(values, { abortEarly: false });
-      if (error) {
-        return error.details.reduce((errors, detail) => {
-          
-          if (detail.path[0] === "password") {
-            return {
-              ...errors,
-              password:
-                '"password" must contain a lowercase, uppercase, number and one of : !@#$%^&',
-            };
-          }
-          return { ...errors, [detail.path[0]]: detail.message };
-        }, {});
+      if (!error) {
+        return null;
       }
+      const errors = {};
+      for (const detail of error.details) {
+        // const key = detail.context.key;
+        const key = detail.path[detail.path.length - 1];
+        errors[key] = detail.message;
+        console.log(detail);
+      }
+      return errors;
       // if (!error) {
       //   return null;
       // }
@@ -54,11 +53,9 @@ const SignIn = () => {
       // return errors;
     },
     async onSubmit(values) {
-     
-
       try {
         const response = await login(values);
-        navigate("/")
+        navigate("/");
       } catch (err) {
         if (err.response?.status === 400) {
           setServerError(err.response.data);
@@ -67,45 +64,53 @@ const SignIn = () => {
     },
   });
   return (
-    <main className="form-signin w-25 m-auto pt-5">
+    <main
+      className={`form-signin w-25 pt-5 mt-5 w-100 ${checked ? "" : `bg-dark`}`}
+    >
       <form onSubmit={form.handleSubmit} className="pt-5">
-        <h1 className="h3 mb-3 fw-normal text-center">Please sign in</h1>
-         {serverError && <div className="alert alert-danger">{serverError}</div>} 
-        <div className="form-floating pt-3">
+        <h1
+          className={`h3 mb-3 fw-normal text-center ${
+            checked ? "" : `text-light`
+          }`}
+        >
+          Please sign in
+        </h1>
+
+        <div className="form-floating pt-3 w-25 mx-auto text-center">
           <input
-          error={form.touched.email && form.errors.email}
             {...form.getFieldProps("email")}
             type="email"
             className="form-control"
             placeholder="name@example.com"
+            required
           />
+          <span className="text-danger fs-6">
+            {form.touched.email && form.errors.email}
+          </span>
           <label htmlFor="floatingInput">Email address</label>
         </div>
-        <div className="form-floating pt-2">
+        <div className="form-floating pt-2  w-25 mx-auto text-center">
           <input
-          error={form.touched.password && form.errors.password}
             {...form.getFieldProps("password")}
             type="password"
             className="form-control"
             placeholder="Password"
+            required
           />
+          <span className="text-danger fs-6 mb-5">
+            {form.touched.password && form.errors.password}
+          </span>
           <label htmlFor="floatingPassword">Password</label>
         </div>
-
-        <div className="form-check text-start my-3">
-          <input
-            className="form-check-input"
-            type="checkbox"
-            value="remember-me"
-            id="flexCheckDefault"
-          />
-          <label className="form-check-label" htmlFor="flexCheckDefault">
-            Remember me
-          </label>
+        <div className="d-flex justify-content-center">
+          <button
+            className="btn btn-primary py-2 my-5  w-25 "
+            disabled={!form.isValid}
+            type="submit"
+          >
+            Sign in
+          </button>
         </div>
-        <button  disabled={!form.isValid}  className="btn btn-primary w-100 py-2" type="submit">
-          Sign in
-        </button>
       </form>
     </main>
   );

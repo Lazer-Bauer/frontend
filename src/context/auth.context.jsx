@@ -13,6 +13,8 @@ export const authContext = createContext({
 authContext.displayName = "auth";
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState();
+  const [checked, setChecked] = useState("false");
+  const [search, setSearch] = useState("");
   useEffect(() => {
     refreshUser();
   }, []);
@@ -37,6 +39,10 @@ export const AuthProvider = ({ children }) => {
         user,
         login,
         logout,
+        checked,
+        setChecked,
+        search,
+        setSearch,
         signUp: usersService.createUser,
       }}
     >

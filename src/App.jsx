@@ -12,6 +12,7 @@ import ProtectedRout from "./common/ProtectedRoute";
 import BizzSignUp from "./components/BizzSignUp";
 import CreateCard from "./components/Create-card";
 import MyCards from "./components/MyCards";
+import EditCard from "./components/EditCard";
 function App() {
   return (
     <div className="App">
@@ -27,6 +28,14 @@ function App() {
           element={
             <ProtectedRout onlyBiz>
               <CreateCard />
+            </ProtectedRout>
+          }
+        />
+        <Route
+          path="edit-card/:id"
+          element={
+            <ProtectedRout onlyBiz>
+              <EditCard />
             </ProtectedRout>
           }
         />

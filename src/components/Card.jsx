@@ -1,9 +1,14 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-
-const Card = ({ details, replaceCard, userId }) => {
+import { deleteCard, getAllMyCards } from "../services/cardServices";
+import { refreshTokenHeader } from "../services/userService";
+import UseCard from "../Hooks/useCard";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../context/auth.context";
+const Card = ({ details, replaceCard, user, cards, setCards }) => {
   const [isLike, setIsLike] = useState(false);
-
+  const { checked } = useAuth();
+  const navigate = useNavigate();
   const onLike = async () => {
     try {
       console.log("try");
@@ -15,17 +20,26 @@ const Card = ({ details, replaceCard, userId }) => {
     } catch (error) {
       console.log(error);
     }
-
-    // send like/unlike request to server
-    // get card details by id: newCard = await ...
-    // props.replaceCard(newCard);
   };
+  const onDelete = async () => {
+    const response = await deleteCard(details._id);
+    setCards(cards.filter((card) => card._id != details._id));
+    return response;
+  };
+
+  const onEdit = () => {
+    navigate(`/edit-card/${details._id}`);
+  };
+
   useEffect(() => {
-    const isUserId = details.likes.includes(userId);
+    const isUserId = details.likes.includes(user?._id);
     setIsLike(isUserId);
-  }, [userId]);
+  }, [user?._id]);
   return (
-    <div className="card m-4" style={{ width: "18rem" }}>
+    <div
+      className={`card m-4 ${checked ? "" : `bg-dark text-light`}`}
+      style={{ width: "18rem" }}
+    >
       <img
         src={details.image.url}
         className="card-img-top"
@@ -40,12 +54,24 @@ const Card = ({ details, replaceCard, userId }) => {
         <p>{details.createdAt}</p>
       </div>
       <div className="d-flex">
-        <i className="bi bi-trash3 pr-5"></i>
-        <i
-          onClick={() => onLike()}
-          className={`bi bi-heart-fill px-2 ${isLike ? "likedCard" : ""}`}
-        ></i>
-        <i className="bi bi-pencil px-2"></i>
+        {user?.isAdmin ||
+          (details.user_id === user?._id && (
+            <i onClick={() => onDelete()} className="bi bi-trash3 pr-5"></i>
+          ))}
+        {user ? (
+          <i
+            onClick={() => onLike()}
+            className={`bi bi-heart-fill px-2 ${isLike ? "likedCard" : ""}`}
+          ></i>
+        ) : (
+          ""
+        )}
+        {user?.isBusiness && details.user_id === user?._id ? (
+          <i onClick={onEdit} className="bi bi-pencil px-2"></i>
+        ) : (
+          ""
+        )}
+
         <i className="bi bi-telephone-fill"></i>
       </div>
     </div>

@@ -6,6 +6,7 @@ import { useAuth } from "../context/auth.context";
 const Home = () => {
   const [cards, setCards] = useState([]);
   const { user } = useAuth();
+  const { checked } = useAuth();
   useEffect(() => {
     getAll()
       .then((response) => {
@@ -25,16 +26,21 @@ const Home = () => {
   };
 
   return (
-    <div className="text-center bg-info">
+    <div
+      className={`text-center  z-0 ${checked ? "" : `bg-dark`} ${
+        checked ? "" : "text-light"
+      }`}
+    >
       <h1>Business cards</h1>
       <p>Here you can find all business cards from all over the world </p>
+
       <div className="cards-container d-flex flex justify-content-center align-items-center flex-wrap  ">
         {cards.map((card) => (
           <Card
-            userId={user?._id}
             details={card}
             key={card._id}
             replaceCard={replaceCard}
+            user={user}
           />
         ))}
       </div>

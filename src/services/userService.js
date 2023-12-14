@@ -34,12 +34,15 @@ export async function getUser() {
   try {
     const token = getJWT();
     const deCoded = jwtDecode(token);
+    refreshTokenHeader();
     const response = await axios.get(
       `https://monkfish-app-z9uza.ondigitalocean.app/bcard2/users/${deCoded._id}`
     );
-   
+
+    console.log(response.data);
     return response.data;
-  } catch {
+  } catch (err) {
+    console.log(err);
     return null;
   }
 }
