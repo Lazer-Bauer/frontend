@@ -32,14 +32,17 @@ export function getJWT() {
 
 export async function getUser() {
   try {
-    const token = getJWT();
-    const deCoded = jwtDecode(token);
     refreshTokenHeader();
+    const storedUser = localStorage.getItem("savedUser");
+    if (storedUser) return JSON.parse(storedUser);
+    const token = getJWT();
+    if (!token) return;
+    const deCodedUser = jwtDecode(token);
     const response = await axios.get(
-      `https://monkfish-app-z9uza.ondigitalocean.app/bcard2/users/${deCoded._id}`
+      `https://monkfish-app-z9uza.ondigitalocean.app/bcard2/users/${deCodedUser._id}`
     );
 
-    console.log(response.data);
+    localStorage.setItem("savedUser", JSON.stringify(response.data));
     return response.data;
   } catch (err) {
     console.log(err);
@@ -49,6 +52,7 @@ export async function getUser() {
 export function logout() {
   localStorage.removeItem(TOKEN_KEY);
   refreshTokenHeader();
+  localStorage.removeItem("savedUser");
 }
 
 const usersService = {

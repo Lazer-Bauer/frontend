@@ -26,7 +26,9 @@ const FavoriteList = () => {
   };
 
   return (
-    <div className={`text-center ${checked ? " bg-info" : `bg-dark`}`}>
+    <div
+      className={`text-center ${checked ? " bg-info" : `bg-dark text-light`}`}
+    >
       <h1>Favorite Cards</h1>
       <p>Here you can find all your favorite cards</p>
       {!cards.length ? (

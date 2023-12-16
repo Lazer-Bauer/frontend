@@ -6,16 +6,16 @@ const Footer = () => {
 
   return (
     <footer
-      className={`py-3 my-1 text-primary opacity-75 position-fixed bottom-0 w-100 ${
+      className={`py-3 my-1 text-primary opacity-75  w-100 ${
         checked ? "" : `bg-dark text-light opacity-100`
       } `}
     >
       <ul className="nav justify-content-center border-bottom pb-3 mb-1">
         <li className="nav-item pe-5">
           <i className="bi bi-info-circle ps-3 fs-5"></i>
-          <a href="#" className="nav-link px-2 text-primary p-0">
+          <NavLink to="/about" className="nav-link px-2 text-primary p-0">
             About
-          </a>
+          </NavLink>
         </li>
         {user && (
           <li className="nav-item pe-5">

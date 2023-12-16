@@ -5,59 +5,68 @@ import { Route, Routes } from "react-router-dom";
 import SignIn from "./components/Sign-In";
 import SignUp from "./components/Sign-Up";
 import Footer from "./components/Footer";
-import axios from "axios";
+
 import FavoriteList from "./components/FavoriteList";
 import SignOut from "./components/Sign-out";
 import ProtectedRout from "./common/ProtectedRoute";
-import BizzSignUp from "./components/BizzSignUp";
+
 import CreateCard from "./components/Create-card";
 import MyCards from "./components/MyCards";
 import EditCard from "./components/EditCard";
+import { useAuth } from "./context/auth.context";
+import BusinessPage from "./components/BusinessPage";
+import About from "./components/About";
 function App() {
+  const { checked } = useAuth();
+
   return (
-    <div className="App">
+    <div className={`App ${checked ? "" : `bg-dark`} `}>
       <Header />
+      <div style={{ minHeight: "90vh" }}>
+        <Routes>
+          <Route path="/about" element={<About />} />
+          <Route path="/" element={<Home />} />
+          <Route path="/sign-in" element={<SignIn />} />
+          <Route path="/sign-up" element={<SignUp />} />
+          <Route path="/sign-up-biz" element={<SignUp isBusiness />} />
 
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/sign-in" element={<SignIn />} />
-        <Route path="/sign-up" element={<SignUp />} />
-        <Route path="/sign-up-biz" element={<BizzSignUp />} />
-        <Route
-          path="create-card"
-          element={
-            <ProtectedRout onlyBiz>
-              <CreateCard />
-            </ProtectedRout>
-          }
-        />
-        <Route
-          path="edit-card/:id"
-          element={
-            <ProtectedRout onlyBiz>
-              <EditCard />
-            </ProtectedRout>
-          }
-        />
-        <Route
-          path="/favorites"
-          element={
-            <ProtectedRout>
-              <FavoriteList />
-            </ProtectedRout>
-          }
-        />
-        <Route
-          path="/my-cards"
-          element={
-            <ProtectedRout onlyBiz>
-              <MyCards />
-            </ProtectedRout>
-          }
-        />
+          <Route
+            path="create-card"
+            element={
+              <ProtectedRout onlyBiz>
+                <CreateCard />
+              </ProtectedRout>
+            }
+          />
+          <Route
+            path="edit-card/:id"
+            element={
+              <ProtectedRout onlyBiz>
+                <EditCard />
+              </ProtectedRout>
+            }
+          />
+          <Route
+            path="/favorites"
+            element={
+              <ProtectedRout>
+                <FavoriteList />
+              </ProtectedRout>
+            }
+          />
+          <Route
+            path="/my-cards"
+            element={
+              <ProtectedRout onlyBiz>
+                <MyCards />
+              </ProtectedRout>
+            }
+          />
 
-        <Route path="/sign-out" element={<SignOut />} redirect="/" />
-      </Routes>
+          <Route path="/sign-out" element={<SignOut />} redirect="/" />
+          <Route path="/business-page/:id" element={<BusinessPage />} />
+        </Routes>
+      </div>
       <Footer />
     </div>
   );

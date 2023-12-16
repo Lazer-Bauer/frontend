@@ -15,13 +15,7 @@ const MyCards = () => {
       })
       .catch((error) => console.log(error));
   }, []);
-  // function search() {
-  //   getAllMyCards().then((response) => {
-  //     search
-  //       ? setCards(response.data.filter((card) => card.includes(search)))
-  //       : "";
-  //   });
-  // }
+
   const replaceCard = (newCard) => {
     const newCards = cards.map((x) => {
       if (x._id === newCard._id) {
@@ -33,7 +27,7 @@ const MyCards = () => {
   };
 
   return (
-    <div className={`text-center${checked ? "" : ` bg-dark`}`}>
+    <div className={`text-center${checked ? "" : ` bg-dark text-light`}`}>
       <h1>My Cards</h1>
       <p>Here you can find all your cards</p>
       {!cards.length ? (

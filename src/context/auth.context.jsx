@@ -12,7 +12,8 @@ export const authContext = createContext({
 });
 authContext.displayName = "auth";
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState();
+  const storedUser = localStorage.getItem("savedUser");
+  const [user, setUser] = useState(!storedUser ? null : JSON.parse(storedUser));
   const [checked, setChecked] = useState("false");
   const [search, setSearch] = useState("");
   useEffect(() => {

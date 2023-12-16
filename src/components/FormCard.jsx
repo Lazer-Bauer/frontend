@@ -1,76 +1,74 @@
-import { Formik } from "formik";
-import SignUp from "./Sign-Up";
-const Form = ({ form, checked, serverError, isBusiness }) => {
+const FormCard = ({ form, checked, edit }) => {
   return (
     <form onSubmit={form.handleSubmit} className="pt-5">
       <h1
         className={`h3 mb-3 fw-normal text-center ${
-          checked ? "" : `text-light`
-        }`}
+          checked ? "" : `text-white`
+        } `}
       >
-        Please sign Up {isBusiness && "as business"}
+        {edit ? "Edit " : "Create "} Card
       </h1>
-      {serverError && <div className="alert alert-danger">{serverError}</div>}
-      <div className="firstRow d-flex justify-content-center pt-3 ">
+      <div className="firstRow d-flex justify-content-center pt-3">
         <div className="form-floating pt-3 ">
           <input
-            {...form.getFieldProps("name.first")}
+            {...form.getFieldProps("title")}
             type="text"
             className="form-control"
-            placeholder="First name text-dark"
+            placeholder="title"
             required
           />
           <span className="text-danger fs-6">
-            {form.touched.name?.first && form.errors.first}
+            {form.touched.title && form.errors.title}
           </span>
-          <label htmlFor="floatingPassword">First name</label>
+          <label htmlFor="floatingPassword">Title</label>
         </div>
 
         <div className="form-floating pt-3 mx-4 ">
           <input
-            {...form.getFieldProps("name.last")}
+            {...form.getFieldProps("subtitle")}
             type="text"
             className="form-control"
-            placeholder="Last name"
+            placeholder="subtitle"
             required
           />
           <span className="text-danger fs-6">
-            {form.touched.name?.last && form.errors.last}
+            {form.touched.subtitle && form.errors.subtitle}
           </span>
-          <label htmlFor="floatingPassword">Last name</label>
+          <label htmlFor="floatingPassword">Subtitle</label>
         </div>
 
         <div className="form-floating pt-2">
           <input
-            {...form.getFieldProps("email")}
-            type="email"
+            {...form.getFieldProps("description")}
+            type="text"
             className="form-control"
-            placeholder="name@example.com"
+            placeholder="description"
             required
           />
-          <span>{form.touched.email && form.errors.email}</span>
-          <label htmlFor="floatingInput">Email address</label>
+          <span className="text-danger fs-6">
+            {form.touched.description && form.errors.description}
+          </span>
+          <label htmlFor="floatingInput">Description</label>
         </div>
       </div>
       <div className="secondRow d-flex justify-content-center pt-3">
         <div className="form-floating pt-2">
           <input
-            {...form.getFieldProps("password")}
-            type="password"
+            {...form.getFieldProps("email")}
+            type="email"
             className="form-control"
-            placeholder="Password"
+            placeholder="Email"
             required
           />
           <span className="text-danger fs-6">
-            {form.touched.password && form.errors.password}
+            {form.touched.email && form.errors.email}
           </span>
-          <label htmlFor="floatingPassword">Password</label>
+          <label htmlFor="floatingPassword">Email</label>
         </div>
-
-        <div className="form-floating pt-3 mx-4">
+        <div className="form-floating pt-2 mx-4">
           <input
             {...form.getFieldProps("phone")}
-            type="text"
+            type="tel"
             className="form-control"
             placeholder="Phone"
             required
@@ -159,25 +157,33 @@ const Form = ({ form, checked, serverError, isBusiness }) => {
             type="text"
             className="form-control"
             placeholder="Zip"
-            required
+          />
+          <label htmlFor="floatingPassword">Zip</label>
+        </div>
+        <div className="form-floating pt-3 mx-4">
+          <input
+            {...form.getFieldProps("web")}
+            type="text"
+            className="form-control"
+            placeholder="web"
           />
           <span className="text-danger fs-6">
-            {form.touched.address?.zip && form.errors.zip}
+            {form.touched.web && form.errors.web}
           </span>
-          <label htmlFor="floatingPassword">Zip</label>
+          <label htmlFor="floatingPassword">Web</label>
         </div>
       </div>
 
-      <div className=" d-flex justify-content-center py-5">
+      <div className=" d-flex justify-content-center pt-5 pb-5">
         <button
           disabled={!form.isValid}
-          className="btn btn-primary w-25 py-2 "
+          className="btn btn-primary w-25 py-3 "
           type="submit"
         >
-          Sign Up
+          {edit ? "Edit " : "Create "} Card
         </button>
       </div>
     </form>
   );
 };
-export default Form;
+export default FormCard;

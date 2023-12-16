@@ -6,7 +6,8 @@ import { useAuth } from "../context/auth.context";
 const Home = () => {
   const [cards, setCards] = useState([]);
   const { user } = useAuth();
-  const { checked } = useAuth();
+  const { checked, search } = useAuth();
+
   useEffect(() => {
     getAll()
       .then((response) => {
@@ -35,14 +36,26 @@ const Home = () => {
       <p>Here you can find all business cards from all over the world </p>
 
       <div className="cards-container d-flex flex justify-content-center align-items-center flex-wrap  ">
-        {cards.map((card) => (
-          <Card
-            details={card}
-            key={card._id}
-            replaceCard={replaceCard}
-            user={user}
-          />
-        ))}
+        {!cards.length && "there are no cards"}
+        {search
+          ? cards
+              .filter((card) => card.title.includes(search))
+              .map((card) => (
+                <Card
+                  details={card}
+                  key={card._id}
+                  replaceCard={replaceCard}
+                  user={user}
+                />
+              ))
+          : cards.map((card) => (
+              <Card
+                details={card}
+                key={card._id}
+                replaceCard={replaceCard}
+                user={user}
+              />
+            ))}
       </div>
     </div>
   );

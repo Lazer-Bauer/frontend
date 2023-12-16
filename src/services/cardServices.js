@@ -26,9 +26,10 @@ export async function deleteCard(id) {
   );
   return response;
 }
-export async function editCard(id) {
+export async function editCard(id, values) {
   const response = await axios.put(
-    `https://monkfish-app-z9uza.ondigitalocean.app/bcard2/cards/${id}`
+    `https://monkfish-app-z9uza.ondigitalocean.app/bcard2/cards/${id}`,
+    values
   );
   return response;
 }

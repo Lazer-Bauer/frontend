@@ -42,15 +42,6 @@ const SignIn = () => {
         console.log(detail);
       }
       return errors;
-      // if (!error) {
-      //   return null;
-      // }
-      // const errors = {};
-      // for (const detail of error.details) {
-      //   const key = detail.path[0];
-      //   errors[key] = detail.message;
-      // }
-      // return errors;
     },
     async onSubmit(values) {
       try {

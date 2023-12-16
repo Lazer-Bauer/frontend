@@ -9,13 +9,16 @@ const Card = ({ details, replaceCard, user, cards, setCards }) => {
   const [isLike, setIsLike] = useState(false);
   const { checked } = useAuth();
   const navigate = useNavigate();
+  function toBusinessPage() {
+    navigate(`/business-page/${details._id}`);
+  }
+
   const onLike = async () => {
     try {
-      console.log("try");
       const response = await axios.patch(
         `https://monkfish-app-z9uza.ondigitalocean.app/bcard2/cards/${details._id}`
       );
-      console.log(response);
+
       setIsLike((prev) => !prev);
     } catch (error) {
       console.log(error);
@@ -41,6 +44,8 @@ const Card = ({ details, replaceCard, user, cards, setCards }) => {
       style={{ width: "18rem" }}
     >
       <img
+        onClick={toBusinessPage}
+        style={{ height: "200px" }}
         src={details.image.url}
         className="card-img-top"
         alt={details.image.alt}
@@ -71,8 +76,9 @@ const Card = ({ details, replaceCard, user, cards, setCards }) => {
         ) : (
           ""
         )}
-
-        <i className="bi bi-telephone-fill"></i>
+        <a href={`tel:${details.phone}`}>
+          <i className="bi bi-telephone-fill"></i>
+        </a>
       </div>
     </div>
   );
